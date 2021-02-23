@@ -107,6 +107,45 @@ int main() {
 			}
 		}
 
+		if (task == "SearchName")
+		{
+			if (personPrefix == "")
+			{
+				cout << "Input phone: ";
+				getline(cin, personPrefix);
+			}
+			int found = -1;
+			bool foundPerson = false;
+			while ((found = findPersonName(NoteBook, personPrefix, found + 1)) != -1)
+			{
+				NoteBook[found].printPerson();
+				foundPerson = true;
+				cout << endl;
+			}
+			if (!foundPerson)
+			{
+				cout << "Person not found 404: " << personPrefix << endl;
+			}
+		}
+
+		if (task == "Remove")
+		{
+			if (personPrefix == "")
+			{
+				cout << "Input name: ";
+				getline(cin, personPrefix);
+			}
+
+			if (removePerson(NoteBook, personPrefix))
+			{
+				cout << "Person with name " << personPrefix << " has been removed." << endl;
+			}
+			else
+			{
+				cout << "Person with name " << personPrefix << " hasn't been found" << endl;
+			}
+		}
+
 
 	}
 
@@ -186,6 +225,18 @@ int findPersonPhone(vector<PersonPhone>& noteBook, string name, int poz)
 	return -1;
 }
 
+int findPersonName(vector<PersonPhone>& noteBook, string phone, int poz)
+{
+	for (int i = poz; i < noteBook.size(); i++)
+	{
+		if (noteBook[i].personPhone.find(phone) == 0)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+
 bool addPerson(vector<PersonPhone>& noteBook, PersonPhone newPerson)
 {
 	int found = -1;
@@ -198,4 +249,16 @@ bool addPerson(vector<PersonPhone>& noteBook, PersonPhone newPerson)
 		}
 	}
 	noteBook.push_back(newPerson);
+}
+
+bool removePerson(vector<PersonPhone>& noteBook, string name)
+{
+	int index = findPersonPhone(noteBook, name, 0);
+	if (index > -1)
+	{
+		noteBook.erase(noteBook.begin() + index);
+		return true;
+	}
+	else
+		return false;
 }
